@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dreamer's Art Journey</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="nav-inner">
+      <span class="nav-logo">Dreamer's Art Journey</span>
+      <div class="nav-links">
+        <a href="#courses">Courses</a>
+        <a href="#hours">Hours</a>
+        <a href="#gallery">Gallery</a>
+        <a href="#goals">Goals</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="hero-left">
+      <div class="hero-tag">🎨 The Journey Starts Here</div>
+      <h1 class="hero-title">Dreamer's<br><span class="accent">Art Journey</span></h1>
+      <p class="hero-sub">Drawing Basics → Anime → Digital Art → Animation.<br>One course at a time.</p>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num" id="stat-done">0</span><span class="stat-lbl">Done</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-num" id="stat-hours">0</span><span class="stat-lbl">Hrs Logged</span></div>
+        <div class="stat-div"></div>
+        <div class="stat"><span class="stat-num" id="stat-photos">0</span><span class="stat-lbl">Progress Shots</span></div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="ring-wrap">
+        <svg class="ring-svg" viewBox="0 0 160 160">
+          <circle class="ring-bg" cx="80" cy="80" r="68"/>
+          <circle class="ring-fg" id="ring-fg" cx="80" cy="80" r="68"/>
+        </svg>
+        <div class="ring-text">
+          <span class="ring-num" id="ring-num">0</span>
+          <span class="ring-goal">/ 15 hrs</span>
+          <span class="ring-period">this week</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="hours">
+    <div class="container">
+      <div class="sec-header">
+        <h2>Weekly Hours</h2>
+        <p>Goal: 10–15 hours per week</p>
+      </div>
+      <div class="hours-card">
+        <div class="hours-left">
+          <h3>Log a Session</h3>
+          <div class="hour-btns">
+            <button class="hour-btn" onclick="logHours(0.5)">+30 min</button>
+            <button class="hour-btn" onclick="logHours(1)">+1 hr</button>
+            <button class="hour-btn" onclick="logHours(1.5)">+1.5 hrs</button>
+            <button class="hour-btn" onclick="logHours(2)">+2 hrs</button>
+            <button class="hour-btn" onclick="logHours(3)">+3 hrs</button>
+          </div>
+          <div class="custom-row">
+            <input type="number" id="custom-input" placeholder="Custom hrs" min="0.5" max="12" step="0.5" class="text-input" />
+            <button class="btn-primary" onclick="logCustom()">Log</button>
+          </div>
+        </div>
+        <div class="hours-right">
+          <div class="bar-labels">
+            <span>0</span><span>5</span><span>10</span><span class="goal-lbl">15 ← goal</span>
+          </div>
+          <div class="bar-track"><div class="bar-fill" id="bar-fill"></div></div>
+          <div class="bar-meta">
+            <span id="week-text">0 hours this week</span>
+            <button class="btn-ghost" onclick="resetWeek()">Reset Week</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="courses">
+    <div class="container">
+      <div class="sec-header">
+        <h2>Course Tracker</h2>
+        <p>Click the status badge on any course to update your progress</p>
+      </div>
+
+      <div class="ongoing-wrap">
+        <div class="ongoing-label">ONGOING — Run alongside everything</div>
+        <div class="course-card" id="card-sketching" data-id="sketching">
+          <div class="card-left">
+            <div class="course-num star">★</div>
+            <div class="card-info">
+              <h3>The Ultimate Sketching Course</h3>
+              <span class="platform proko">Proko</span>
+              <p>Daily sketchbook habit with ballpoint pen. Draw anywhere. This directly hits your draw-anywhere goal — run it alongside every other course.</p>
+            </div>
+          </div>
+          <div class="card-right">
+            <button class="status-badge" id="status-sketching" onclick="cycleStatus('sketching')"></button>
+          </div>
+        </div>
+      </div>
+
+      <div id="courses-list"></div>
+
+      <div class="later-wrap">
+        <div class="later-label">WAY LATER — Build everything else first</div>
+        <div class="course-card later-card">
+          <div class="card-left">
+            <div class="course-num later">🎬</div>
+            <div class="card-info">
+              <h3>Aaron Blaise — Animation Courses</h3>
+              <span class="platform external">creatureartteacher.com</span>
+              <p>Ex-Disney animator. The most legitimate and affordable animation instruction available. Come here only after you have a strong digital art foundation.</p>
+            </div>
+          </div>
+          <div class="card-right">
+            <span class="status-badge locked-static">Later</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="gallery">
+    <div class="container">
+      <div class="sec-header">
+        <h2>Progress Gallery</h2>
+        <p>Document where you started and how far you've come</p>
+      </div>
+      <button class="btn-primary" onclick="openModal()">+ Add Progress Photo</button>
+      <div class="gallery-grid" id="gallery-grid"></div>
+      <div class="gallery-empty" id="gallery-empty">
+        <div class="empty-ico">🖼️</div>
+        <p>No photos yet. Add your first drawing to start tracking progress.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="goals">
+    <div class="container">
+      <div class="sec-header">
+        <h2>The Goals</h2>
+        <p>Why you're doing this</p>
+      </div>
+      <div class="goals-grid">
+        <div class="goal-card">
+          <div class="goal-ico">✏️</div>
+          <h3>Draw Anywhere</h3>
+          <p>Minimal gear. Sketchbook + pen. Sit down anywhere and draw what's in front of you.</p>
+        </div>
+        <div class="goal-card">
+          <div class="goal-ico">⚔️</div>
+          <h3>Characters & Anime</h3>
+          <p>Cool stylized characters, anime figures, dynamic poses, weapons, armor, and the backgrounds behind them.</p>
+        </div>
+        <div class="goal-card">
+          <div class="goal-ico">🖥️</div>
+          <h3>Digital Art</h3>
+          <p>Transition strong traditional fundamentals into digital — Procreate, Photoshop, Clip Studio Paint.</p>
+        </div>
+        <div class="goal-card">
+          <div class="goal-ico">🎬</div>
+          <h3>Animation</h3>
+          <p>The long game. Far out but it's the end goal. Build everything else first and you'll get there.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p>Dreamer's Art Journey — stay consistent, stay dangerous 🎨</p>
+    <a href="https://github.com/DreamerxDev" target="_blank">GitHub</a>
+  </footer>
+
+  <div class="modal-overlay" id="modal-overlay" onclick="closeOutside(event)">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>Add Progress Photo</h3>
+        <button class="modal-x" onclick="closeModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-grp">
+          <label>Photo</label>
+          <div class="tab-row">
+            <button class="tab active" id="tab-file-btn" onclick="switchTab('file')">Upload File</button>
+            <button class="tab" id="tab-url-btn" onclick="switchTab('url')">Paste URL</button>
+          </div>
+          <div id="tab-file">
+            <input type="file" id="photo-file" accept="image/*" onchange="previewFile(event)" class="file-input" />
+          </div>
+          <div id="tab-url" class="hidden">
+            <input type="text" id="photo-url" placeholder="https://i.imgur.com/..." class="text-input" oninput="previewUrl()" />
+          </div>
+          <img id="photo-preview" class="preview-img hidden" alt="Preview" />
+        </div>
+        <div class="form-grp">
+          <label>Date</label>
+          <input type="date" id="photo-date" class="text-input" />
+        </div>
+        <div class="form-grp">
+          <label>Caption</label>
+          <input type="text" id="photo-caption" placeholder="e.g. Week 3 gesture study" class="text-input" />
+        </div>
+        <div class="form-grp">
+          <label>Course (optional)</label>
+          <select id="photo-course" class="text-input">
+            <option value="">— none —</option>
+            <option>Drawing Basics</option>
+            <option>The Gesture Course</option>
+            <option>Figure Drawing Fundamentals</option>
+            <option>Head Drawing and Construction</option>
+            <option>The Perspective Course</option>
+            <option>The Shading Course</option>
+            <option>Develop Your Art Style</option>
+            <option>Anime Art Academy</option>
+            <option>Digital Painting Fundamentals</option>
+            <option>Marc Brunet's ART School</option>
+            <option>The Ultimate Sketching Course</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-ghost" onclick="closeModal()">Cancel</button>
+        <button class="btn-primary" onclick="savePhoto()">Save Photo</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

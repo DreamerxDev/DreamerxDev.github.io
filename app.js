@@ -227,51 +227,100 @@ function renderSectionPanel(cid) {
     const pct = sd.pct || 0;
     const photoCount = (sd.photos || []).length;
     const isDone = pct >= 100;
+    const circ = 2 * Math.PI * 38;
+    const offset = circ - (pct / 100) * circ;
 
     const row = document.createElement('div');
     row.className = 'section-row' + (isDone ? ' section-done' : '');
 
     row.innerHTML = `
-      <div class="srow-top">
-        <div class="srow-name">
-          <span class="srow-check">${isDone ? '✓' : (idx + 1)}</span>
-          <span class="srow-label">${sname}</span>
+      <div class="srow-header">
+        <div class="srow-left">
+          <span class="srow-num ${isDone ? 'done' : ''}" data-idx="${idx + 1}">${isDone ? '✓' : (idx + 1)}</span>
+          <span class="srow-name">${sname}</span>
         </div>
         <div class="srow-right">
-          <button class="s-photo-btn">
-            📷${photoCount > 0 ? `<span class="s-photo-count">${photoCount}</span>` : ''}
-          </button>
-          <span class="s-pct-label">${pct}%</span>
+          <span class="srow-pct-mini">${pct}%</span>
+          <button class="s-photo-btn">📷${photoCount > 0 ? `<span class="s-photo-count">${photoCount}</span>` : ''}</button>
+          <button class="srow-chevron-btn"><span class="srow-chevron">▼</span></button>
         </div>
       </div>
-      <div class="srow-bar-wrap">
-        <input type="range" class="s-slider" min="0" max="100" step="5" value="${pct}" />
+      <div class="srow-body">
+        <div class="srow-ring-area">
+          <div class="sec-ring-wrap">
+            <svg viewBox="0 0 100 100" class="sec-ring-svg">
+              <circle class="sec-ring-track" cx="50" cy="50" r="38"/>
+              <circle class="sec-ring-fill ${isDone ? 'ring-done' : ''}" cx="50" cy="50" r="38"
+                style="stroke-dasharray:${circ.toFixed(1)};stroke-dashoffset:${offset.toFixed(1)}"/>
+            </svg>
+            <div class="sec-ring-center">
+              <span class="sec-ring-pct">${isDone ? '✓' : pct + '%'}</span>
+            </div>
+          </div>
+          <div class="sec-controls">
+            <div class="sec-adj-row">
+              <button class="sec-adj" data-delta="-25">−25</button>
+              <button class="sec-adj" data-delta="-10">−10</button>
+              <button class="sec-adj" data-delta="10">+10</button>
+              <button class="sec-adj" data-delta="25">+25</button>
+            </div>
+            <button class="sec-done-btn ${isDone ? 'done' : ''}">${isDone ? '✓ Complete — Click to Reset' : 'Mark as Done'}</button>
+          </div>
+        </div>
       </div>
     `;
 
-    const slider = row.querySelector('.s-slider');
-    slider.style.setProperty('--val', pct + '%');
-    slider.addEventListener('input', () => {
-      const v = parseInt(slider.value);
-      slider.style.setProperty('--val', v + '%');
-      row.querySelector('.s-pct-label').textContent = v + '%';
-      setSecPct(cid, sname, v);
-      if (v >= 100) {
-        row.classList.add('section-done');
-        row.querySelector('.srow-check').textContent = '✓';
-      } else {
-        row.classList.remove('section-done');
-        row.querySelector('.srow-check').textContent = idx + 1;
-      }
-      updateCourseProgress(cid);
+    // Toggle collapse/expand for this section
+    row.querySelector('.srow-chevron-btn').addEventListener('click', () => {
+      const body = row.querySelector('.srow-body');
+      const chevron = row.querySelector('.srow-chevron');
+      const isOpen = body.classList.contains('open');
+      body.classList.toggle('open', !isOpen);
+      chevron.style.transform = isOpen ? '' : 'rotate(180deg)';
     });
 
-    row.querySelector('.s-photo-btn').addEventListener('click', () => {
+    row.querySelector('.s-photo-btn').addEventListener('click', (e) => {
+      e.stopPropagation();
       openSectionModal(cid, sname);
+    });
+
+    row.querySelectorAll('.sec-adj').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const cur = getSec(cid, sname).pct || 0;
+        const next = Math.min(100, Math.max(0, cur + parseInt(btn.dataset.delta)));
+        applySecPct(cid, sname, next, row, idx);
+      });
+    });
+
+    row.querySelector('.sec-done-btn').addEventListener('click', () => {
+      const cur = getSec(cid, sname).pct || 0;
+      applySecPct(cid, sname, cur >= 100 ? 0 : 100, row, idx);
     });
 
     panel.appendChild(row);
   });
+}
+
+function applySecPct(cid, sname, pct, row, idx) {
+  setSecPct(cid, sname, pct);
+  const isDone = pct >= 100;
+  const circ = 2 * Math.PI * 38;
+  const offset = circ - (pct / 100) * circ;
+
+  const fill = row.querySelector('.sec-ring-fill');
+  const ringPct = row.querySelector('.sec-ring-pct');
+  const numBadge = row.querySelector('.srow-num');
+  const pctMini = row.querySelector('.srow-pct-mini');
+  const doneBtn = row.querySelector('.sec-done-btn');
+
+  if (fill) { fill.style.strokeDashoffset = offset.toFixed(1); fill.className = 'sec-ring-fill' + (isDone ? ' ring-done' : ''); }
+  if (ringPct) ringPct.textContent = isDone ? '✓' : pct + '%';
+  if (numBadge) { numBadge.className = 'srow-num' + (isDone ? ' done' : ''); numBadge.textContent = isDone ? '✓' : numBadge.dataset.idx; }
+  if (pctMini) pctMini.textContent = pct + '%';
+  if (doneBtn) { doneBtn.className = 'sec-done-btn' + (isDone ? ' done' : ''); doneBtn.textContent = isDone ? '✓ Complete — Click to Reset' : 'Mark as Done'; }
+  row.classList.toggle('section-done', isDone);
+
+  updateCourseProgress(cid);
 }
 
 function updateCourseProgress(cid) {

@@ -727,16 +727,17 @@ a:hover { text-decoration: underline; }
 /* ─── RING AREA ─── */
 .srow-ring-area {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 28px;
-  padding: 20px 24px;
+  gap: 20px;
+  padding: 24px;
 }
 
 /* ─── CIRCULAR PROGRESS RING ─── */
 .sec-ring-wrap {
   position: relative;
-  width: 100px;
-  height: 100px;
+  width: 130px;
+  height: 130px;
   flex-shrink: 0;
 }
 .sec-ring-svg {
@@ -771,20 +772,20 @@ a:hover { text-decoration: underline; }
 .sec-ring-pct {
   font-family: 'Space Grotesk', sans-serif;
   font-weight: 700;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
   color: var(--text);
 }
 
 /* ─── SECTION CONTROLS ─── */
-.sec-controls { display: flex; flex-direction: column; gap: 10px; flex: 1; }
-.sec-adj-row { display: flex; gap: 6px; flex-wrap: wrap; }
+.sec-controls { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
+.sec-adj-row { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
 .sec-adj {
-  padding: 6px 12px;
+  padding: 8px 16px;
   background: var(--surface);
   border: 1px solid var(--border);
-  border-radius: 7px;
+  border-radius: 8px;
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
@@ -792,17 +793,19 @@ a:hover { text-decoration: underline; }
 }
 .sec-adj:hover { background: var(--accent-glow); border-color: var(--accent); color: var(--accent-light); }
 .sec-done-btn {
-  padding: 8px 16px;
+  padding: 10px 24px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 8px;
   color: var(--muted);
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   font-family: 'Inter', sans-serif;
-  text-align: left;
+  text-align: center;
+  width: 100%;
+  max-width: 260px;
 }
 .sec-done-btn:hover { border-color: var(--green); color: var(--green); background: rgba(16,185,129,0.08); }
 .sec-done-btn.done { background: rgba(16,185,129,0.1); border-color: rgba(16,185,129,0.4); color: var(--green); }

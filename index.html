@@ -236,6 +236,47 @@
     </div>
   </div>
 
+  <!-- Section Photo Modal -->
+  <div class="modal-overlay" id="sm-overlay" onclick="closeSecOutside(event)">
+    <div class="modal sm-modal">
+      <div class="modal-head">
+        <div>
+          <div class="sm-subtitle">Section Photos</div>
+          <h3 id="sm-title"></h3>
+        </div>
+        <button class="modal-x" onclick="closeSectionModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="sm-existing">
+          <div class="sm-grid" id="sm-photo-grid"></div>
+          <div class="sm-empty" id="sm-empty">No photos yet for this section.</div>
+        </div>
+        <div class="sm-divider">Add New Photo</div>
+        <div class="form-grp">
+          <div class="tab-row">
+            <button class="tab active" id="sm-file-btn" onclick="switchSecTab('file')">Upload File</button>
+            <button class="tab" id="sm-url-btn" onclick="switchSecTab('url')">Paste URL</button>
+          </div>
+          <div id="sm-tab-file">
+            <input type="file" id="sm-file" accept="image/*" onchange="smPreviewFile(event)" class="file-input" />
+          </div>
+          <div id="sm-tab-url" class="hidden">
+            <input type="text" id="sm-url" placeholder="https://..." class="text-input" oninput="smPreviewUrl()" />
+          </div>
+          <img id="sm-preview" class="preview-img hidden" alt="Preview" />
+        </div>
+        <div class="form-grp">
+          <label>Caption (optional)</label>
+          <input type="text" id="sm-caption" placeholder="e.g. gesture warmup study" class="text-input" />
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn-ghost" onclick="closeSectionModal()">Close</button>
+        <button class="btn-primary" onclick="saveSecPhoto()">Save Photo</button>
+      </div>
+    </div>
+  </div>
+
   <script src="app.js"></script>
 </body>
 </html>

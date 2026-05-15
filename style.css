@@ -582,7 +582,7 @@ a:hover { text-decoration: underline; }
 }
 
 /* Override old course-card padding since header/footer now handle it */
-.course-card { padding: 0; }
+.course-card { padding: 0; flex-direction: column; align-items: stretch; }
 
 /* ─── OVERALL PROGRESS BAR ─── */
 .overall-bar-track {
@@ -667,7 +667,7 @@ a:hover { text-decoration: underline; }
   font-family: 'Space Grotesk', sans-serif;
 }
 .srow-num.done { background: var(--green); color: white; border-color: var(--green); }
-.srow-name { font-size: 0.875rem; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.srow-name { font-size: 0.875rem; font-weight: 500; color: var(--text); }
 .srow-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
 .srow-pct-mini {
   font-size: 0.75rem;
